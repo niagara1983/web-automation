@@ -5,10 +5,10 @@ ext {
     drivers = ["firefox", "chrome", "phantomJs"]
 
     ext {
-        groovyVersion = '2.4.1'
+        groovyVersion = '2.4.4'
         gebVersion = '0.12.1'
-        seleniumVersion = '2.46.0'
-        chromeDriverVersion = '2.10'
+        seleniumVersion = '2.47.1'
+        chromeDriverVersion = '2.16'
         phantomJsVersion = '1.9.7'
     }
 }
@@ -33,6 +33,9 @@ dependencies {
     // If using JUnit, need to depend on geb-junit (3 or 4)
     testCompile "org.gebish:geb-junit4:$gebVersion"
 
+    // If using testNG
+    testCompile "org.gebish:geb-testng:$gebVersion"
+
     // Drivers
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
@@ -56,7 +59,20 @@ drivers.each { driver ->
         systemProperty "geb.env", driver
 
         // If you wanted to set the baseUrl in your build…
-        // systemProperty "geb.build.baseUrl", "http://myapp.com"
+        switch("${env}") {
+            case 'test':
+                systemProperty "geb.build.baseUrl", "http://www.google.com"
+                break
+            case 'uat':
+                systemProperty "geb.build.baseUrl", "http://www.google.com"
+                break
+            case 'prod':
+                systemProperty "geb.build.baseUrl", "http://www.google.com"
+                break
+            default:
+                println('Provided environment is not correct!')
+        }
+
     }
 }
 
